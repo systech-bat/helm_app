@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm01
+
+data:
+  template.txt: |
+    🔥 <b>Alert!</b>
+
+    ℹ️ PM 2.5: {{`{{ .PM25 }}`}}
+
+    ℹ️ PM 10: {{`{{ .PM10 }}`}}
+
+    💬 URL: {{`{{ .URL }}`}}
+
+    started by helm
