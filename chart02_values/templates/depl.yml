@@ -2,11 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: weather-quality-bot01
-  namespace: wq-bot01
 spec:
   strategy: 
     type: RollingUpdate
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: weather-quality-bot
@@ -17,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: bazdoc/weather_app_bot:1.0
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
         ports:
         - containerPort: 8080
           name: web        
@@ -32,8 +31,8 @@ spec:
           httpGet:
             path: /ready
             port: 8086
-          initialDelaySeconds: 3
-          periodSeconds: 60
+          initialDelaySeconds: 15
+          periodSeconds: 600
         livenessProbe:
           httpGet:
             path: /live
