@@ -1,0 +1,12 @@
+app:
+  replicas: 1
+#  image:
+#    name: bazdoc/weather_app_bot
+#    tag: 1.0
+  ports:
+   web: 8080
+   probes: 8086
+  ingress: 
+    domain: weather.test
+    enabled: true
+  
