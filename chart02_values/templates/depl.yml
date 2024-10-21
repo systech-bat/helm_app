@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: weather-quality-bot01
+  name:   {{ .Release.Name }}
 spec:
   strategy: 
     type: RollingUpdate
   replicas: {{ .Values.app.replicas }}
   selector:
     matchLabels:
-      app: weather-quality-bot
+      app:   {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: weather-quality-bot
+        app:   {{ .Release.Name }}
     spec:
       containers:
       - name: app
@@ -22,7 +22,7 @@ spec:
           name: web        
         envFrom:
           - secretRef:
-              name: env-secret01
+              name: env-{{ .Release.Name }}
         volumeMounts:
         - name: template-volume
           mountPath: /template.txt
@@ -49,4 +49,4 @@ spec:
       volumes:
       - name: template-volume
         configMap:
-          name: cm01
+          name: {{ .Release.Name }}-cm01

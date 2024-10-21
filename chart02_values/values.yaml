@@ -1,5 +1,5 @@
 app:
-  replicas: 2
+  replicas: 1
 #  image:
 #    name: bazdoc/weather_app_bot
 #    tag: 1.0

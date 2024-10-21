@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cm01
+  name: {{ .Release.Name }}-cm01
 
 data:
   template.txt: |
@@ -13,4 +13,4 @@ data:
 
     💬 URL: {{`{{ .URL }}`}}
 
-    я люблю тебя мам!
+    help_template_with_values
