@@ -5,7 +5,7 @@ metadata:
 spec:
   strategy: 
     type: RollingUpdate
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.app.replicas }}
   selector:
     matchLabels:
       app: weather-quality-bot
@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
       - name: app
-        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        image: bazdoc/weather_app_bot:1.0
         ports:
-        - containerPort: 8080
+        - containerPort: {{ .Values.app.ports.web }}
           name: web        
         envFrom:
           - secretRef:
@@ -27,18 +27,18 @@ spec:
         - name: template-volume
           mountPath: /template.txt
           subPath: template.txt
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8086
-          initialDelaySeconds: 15
-          periodSeconds: 600
-        livenessProbe:
-          httpGet:
-            path: /live
-            port: 8086
-          initialDelaySeconds: 3
-          periodSeconds: 3     
+ #       readinessProbe:
+ #         httpGet:
+ #           path: /ready
+ #           port: {{ .Values.app.ports.probes}}
+ #         initialDelaySeconds: 15
+ #         periodSeconds: 600
+ #       livenessProbe:
+ #         httpGet:
+ #           path: /live
+ #           port: {{ .Values.app.ports.probes}}
+ #         initialDelaySeconds: 3
+ #         periodSeconds: 3     
         resources:
           requests:
             cpu: 200m

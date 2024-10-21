@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: weather.test
+  - host: {{ .Values.app.domain }}
     http:
       paths:
       - path: /
@@ -14,4 +14,4 @@ spec:
           service:
             name: weather-svc01
             port:
-              number: 8080
+              number: {{ .Values.app.ports.web }}
