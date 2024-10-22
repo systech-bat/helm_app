@@ -1,0 +1,30 @@
+app:
+  replicas: 1
+#  image:
+#    name: bazdoc/weather_app_bot
+#    tag: 1.0
+  ports:
+   web: 8080
+   probes: 8086
+  ingress: 
+    domain: weather.test
+    enabled: true
+    additionalDomains:
+    - name: weather01.test
+      backendport: 8081
+    - name: weather02.test
+      backendPort: 8082
+  containerName: app01
+  resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits: 
+            cpu: 200m
+            memory: 512Mi    
+  secretData:
+    TG_TOKEN: "7797656775:AAF9L_HLZFr5SLQKlvbJ9IxCP-ElrF2iiCg"
+    IQAIR_TOKEN: "d1b2ae91-0ff4-44e7-807e-d1e4eb5f3983"
+    TEMPLATE_PATH: "/template.txt"
+    CITY: moscow
+    LOG_LEVEL: info # debug

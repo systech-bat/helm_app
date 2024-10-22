@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:   {{ .Release.Name }}
+spec:
+  strategy: 
+    type: RollingUpdate
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app:   {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app:   {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Values.app.containerName | quote }}
+        image: bazdoc/weather_app_bot:1.0
+        ports:
+        - containerPort: {{ .Values.app.ports.web }}
+          name: web        
+        envFrom:
+          - secretRef:
+              name: env-{{ .Release.Name }}
+        volumeMounts:
+        - name: template-volume
+          mountPath: /template.txt
+          subPath: template.txt
+ #       readinessProbe:
+ #         httpGet:
+ #           path: /ready
+ #           port: {{ .Values.app.ports.probes}}
+ #         initialDelaySeconds: 15
+ #         periodSeconds: 600
+ #       livenessProbe:
+ #         httpGet:
+ #           path: /live
+ #           port: {{ .Values.app.ports.probes}}
+ #         initialDelaySeconds: 3
+ #         periodSeconds: 3     
+        resources: {{ .Values.app.resources | toYaml | nindent 10 }}
+                         
+      volumes:
+      - name: template-volume
+        configMap:
+          name: {{ .Release.Name }}-cm01

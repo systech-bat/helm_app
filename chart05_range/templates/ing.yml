@@ -1,0 +1,44 @@
+{{ $root := . }}
+{{ if .Values.app.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ing01
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.app.ingress.domain }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-svc01
+            port:
+              number: {{ .Values.app.ports.web }}
+  {{- if eq .Release.Namespace "weather02" }}           
+  - host: weather02.test
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-svc01
+            port:
+              number: {{ .Values.app.ports.web }}
+  {{- end }}
+  {{- range $domain := .Values.app.ingress.additionalDomains }}
+  - host: {{ $domain.name }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ $root.Release.Name }}-svc01
+            port:
+              number: {{ $domain.backendPort }}
+  {{- end }}
+{{- end }}
